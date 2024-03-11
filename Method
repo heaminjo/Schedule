@@ -1,0 +1,88 @@
+#pragma once
+#include <stdio.h>
+#include <string.h>
+typedef struct Process {
+	char name[30];    //프로세스 이름
+	char focus[30];   //입출력 집중 / CPU 집중
+	Process* next;
+}Process;
+
+typedef struct Queue {
+	Process* front;
+	Process* rear;
+	int count; 
+}Queue;
+
+void MainMenu() {
+	printf("\n");
+	printf("1. 프로세스 생성\n");
+	printf("2.입출력 요청\n");
+	printf("3.입출력 완료\n");
+	printf("4.프로세스 종료\n");
+	printf("\n");
+}
+int Choice() {
+	int select;
+	printf("입력:");
+	scanf_s("%d", &select);
+
+	return select;
+}
+
+void Queue_Show(Queue* Q) {
+	Process* process = Q->front;
+
+	if (Q->count == 0) {
+		printf("[비어있음]");
+	}
+	else {
+		for (int i = 0; i < Q->count; i++) {
+			printf("[%s] ", process->name);
+			process = process->next;
+		}
+	}
+	printf("\n");
+}
+Process* Create_Process() {
+	Process* process = new Process;
+	memset(process, NULL, sizeof(process));
+
+	return process;
+}
+Process* Make_Process() {
+	Process *process = Create_Process();
+
+	char name[30];
+	char focus[30];
+
+	printf("프로세스 이름:");
+	scanf_s("%s", name, sizeof(name));
+
+	printf("입출력 집중 / CPU 집중: ");
+	scanf_s("%s", focus, sizeof(focus));
+
+	strcpy(process->name, name);
+	strcpy(process->focus, focus);
+
+	return process;
+}
+void Add_Ready(Queue* Ready,Process* process) {
+	Process* pre = Ready->front;
+
+	if (Ready->count == 0) {
+		Ready->front = process;
+		Ready->rear = process;
+	}
+	else {
+		Ready->rear->next = process;
+	}
+	Ready->rear = process;
+	Ready->count++;
+}
+Queue* Create_Queue() {
+	Queue* Q = new Queue;
+	memset(Q, NULL, sizeof(Q));
+
+	Q->count = 0;
+	return Q;
+}
