@@ -32,6 +32,7 @@ int Choice() {
 
 	return select;
 }
+//CPU 사용중인 프로세스 출력
 void CPU_Show(CPU* cpu) {
 	if (cpu->check) {
 		printf("실행 중인 프로세스: %s\n", cpu->running->name);
@@ -41,12 +42,14 @@ void CPU_Show(CPU* cpu) {
 	}
 }
 
+//CPU 생성
 CPU* Create_CPU() {
 	CPU* cpu = new CPU;
 	memset(cpu, NULL, sizeof(cpu));
 
 	return cpu;
 }
+//큐 출력
 void Queue_Show(Queue* Q) {
 	Process* process = Q->front;
 
@@ -61,12 +64,15 @@ void Queue_Show(Queue* Q) {
 	}
 	printf("\n");
 }
+//프로세스 생성
 Process* Create_Process() {
 	Process* process = new Process;
 	memset(process, NULL, sizeof(process));
 
 	return process;
 }
+
+//프로세스 정보 입력
 Process* Make_Process() {
 	Process *process = Create_Process();
 
@@ -84,7 +90,9 @@ Process* Make_Process() {
 
 	return process;
 }
-void Add_Ready(Queue* Ready,Process* process) {
+
+//준비 큐에 추가
+void Add_Ready(Queue* Ready,Process* process,CPU* cpu) {
 	if (Ready->count == 0) {
 		if(cpu->check == false){
 			cpu->running = process;
@@ -93,7 +101,6 @@ void Add_Ready(Queue* Ready,Process* process) {
 		}
 		else {
 			Ready->front = Ready->rear = process;
-
 		}
 	}
 	else {
