@@ -13,6 +13,10 @@ typedef struct Queue {
 	int count; 
 }Queue;
 
+struct CPU {
+	Process* running;
+	bool check = false;
+};
 void MainMenu() {
 	printf("\n");
 	printf("1. 프로세스 생성\n");
@@ -28,7 +32,21 @@ int Choice() {
 
 	return select;
 }
+void CPU_Show(CPU* cpu) {
+	if (cpu->check) {
+		printf("실행 중인 프로세스: %s\n", cpu->running->name);
+	}
+	else {
+		printf("비어있음\n");
+	}
+}
 
+CPU* Create_CPU() {
+	CPU* cpu = new CPU;
+	memset(cpu, NULL, sizeof(cpu));
+
+	return cpu;
+}
 void Queue_Show(Queue* Q) {
 	Process* process = Q->front;
 
@@ -67,11 +85,16 @@ Process* Make_Process() {
 	return process;
 }
 void Add_Ready(Queue* Ready,Process* process) {
-	Process* pre = Ready->front;
-
 	if (Ready->count == 0) {
-		Ready->front = process;
-		Ready->rear = process;
+		if(cpu->check == false){
+			cpu->running = process;
+			cpu->check = true;
+			return;
+		}
+		else {
+			Ready->front = Ready->rear = process;
+
+		}
 	}
 	else {
 		Ready->rear->next = process;
