@@ -1,19 +1,22 @@
 #include "Queue.h";
-void MainMenu();   //메인메뉴
-int Choice();      //선택
+
+void MainMenu();   // 메인메뉴
+int Choice();      // 선택 
 Process* Create_Process();   //프로세스 생성
 Process* Make_Process();         //프로세스 만들기
-void Add_Ready(Queue* Ready, Process* process);  //준비 큐에 추가
+void Add_Ready(Queue* Ready, Process* process,CPU* cpu);  //준비 큐에 추가
+void CPU_Show(CPU* cpu);  //실행중인 프로세스 출력
 
 int main(void) {
 	Queue* Ready = Create_Queue();     //준비
-	Queue*  Running= Create_Queue();  //실행
+	CPU* cpu = Create_CPU();          //실행
 	Queue* Blockes = Create_Queue();  //대기
 
-	int select = 0;
+	int select = 0;           
+
 	while (1) {
-		Queue_Show(Ready);
-		Queue_Show(Running);
+		Queue_Show(Ready);    
+		CPU_Show(cpu);
 		Queue_Show(Blockes);
 
 		MainMenu();
@@ -23,7 +26,7 @@ int main(void) {
 		{
 		case 1: {       //프로세스 생성
 			Process* NewProcess = Make_Process();
-			Add_Ready(Ready, NewProcess);
+			Add_Ready(Ready, NewProcess,cpu);
 		}
 		case 2: {
 
@@ -31,6 +34,8 @@ int main(void) {
 		default:
 			break;
 		}
+		system("pause");
+		system("cls");
 	}
 
 	return 0;
